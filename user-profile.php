@@ -58,6 +58,8 @@ $gender = isset($user['gender']) ? $user['gender'] : ''; // Use the fetched 'gen
 
 <body>
 
+    
+
    <script src="https://cdnjs.cloudflare.com/ajax/libs/UAParser.js/1.0.2/ua-parser.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {

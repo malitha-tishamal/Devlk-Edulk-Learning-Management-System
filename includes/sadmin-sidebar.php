@@ -241,6 +241,12 @@
             </a>
         </li>
 
+         <li class="nav-item">
+            <a class="nav-link collapsed" href="pages-reviews.php">
+                <i class="bi bi-flag-fill"></i> <span>Reviews & Reports</span>
+            </a>
+        </li>
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="logout.php">
                 <i class="bi bi-box-arrow-right"></i> <span>Log Out</span>
@@ -248,7 +254,7 @@
         </li>
 
          <li class="nav-item">
-            <a class="nav-link collapsed" href="https://malithatishamal.42web.io/?i=1#about">
+            <a class="nav-link collapsed" href="https://malithatishamal.42web.io">
                 <i class="bi bi-code-square"></i> <span>Developer<br>About Me</span>
             </a>
         </li>

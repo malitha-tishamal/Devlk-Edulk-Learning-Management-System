@@ -39,7 +39,7 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="https://malithatishamal.42web.io/?i=1#about" target="_blank">
+      <a class="nav-link collapsed" href="https://malithatishamal.42web.io" target="_blank">
         <i class="bi bi-code-slash"></i>
         <span>Developer<br>About Me</span>
       </a>

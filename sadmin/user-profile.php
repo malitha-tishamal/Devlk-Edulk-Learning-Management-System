@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                             // Check if profile picture exists, otherwise use default
                                             $profilePic = isset($user['profile_picture']) && !empty($user['profile_picture']) ? $user['profile_picture'] : 'default.jpg';
                                             // Display profile picture with timestamp to force refresh
-                                            echo "<img src='$profilePic?" . time() . "' alt='Profile Picture' class='img-thumbnail mb-1' style='width: 200px; border-radius:50%;'>";
+                                            echo "<img src='$profilePic?" . time() . "' alt='Profile Picture' class='img-thumbnail mb-1' style='width: 250px; border-radius:50%;'>";
                                             ?>
                                             
                                             <form action="update-profile-picture.php" method="POST" enctype="multipart/form-data">
