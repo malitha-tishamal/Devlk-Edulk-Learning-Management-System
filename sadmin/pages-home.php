@@ -125,6 +125,7 @@ $stmt->close();
                         border-radius: 12px;
                         transition: transform 0.2s;
                         background-color: #f8f9fa;
+                        width : 380px;
                     }
                     .card.mini-card:hover {
                         transform: scale(1.02);
@@ -155,13 +156,13 @@ $stmt->close();
                                                                     ? htmlspecialchars($profilePath) 
                                                                     : $defaultPath;
                                                             ?>
-                                                                <div class="col-md-4 col-lg-3 mb-4">
+                                                                <div class="col-md-4  mb-2">
                                                                     <div class="card mini-card shadow-lg p-3">
                                                                         <div class="d-flex align-items-center">
                                                                             <img src="<?= $profileSrc ?>"
                                                                                 alt="Profile Picture"
-                                                                                class="rounded-circle me-3"
-                                                                                style="width: 80px; height: 80px; object-fit: cover; border: 2px solid #007bff;"
+                                                                                class=" me-3"
+                                                                                style="width: 120px; height: 120px; object-fit: cover; border: 2px solid #007bff;"
                                                                                 onerror="this.onerror=null;this.src='<?= $defaultPath ?>';">
                                                                             <div>
                                                                                 <h6 class="mb-1"><?= htmlspecialchars($user['name']) ?></h6>

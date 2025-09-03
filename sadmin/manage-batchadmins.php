@@ -91,7 +91,7 @@ $result = $conn->query($sql);
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<td>" . $row['id'] . "</td>";
-                                        echo "<td><img src='../admin/" . $row["profile_picture"] . "' alt='Profile' width='85'></td>";
+                                        echo "<td><img src='../admin/" . $row["profile_picture"] . "' alt='Profile' width='150px' height '150px;></td>";
                                         echo "<td>" . $row['name'] . "</td>";
                                         echo "<td>" . $row['nic'] . "</td>";
                                         echo "<td>" . $row['email'] . "</td>";

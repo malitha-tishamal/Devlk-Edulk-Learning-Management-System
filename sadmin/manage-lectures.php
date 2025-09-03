@@ -90,7 +90,7 @@ $result = $conn->query($sql);
                                         echo "<tr>";
                                         echo "<td>" . $row['id'] . "</td>";
                                         echo "<td>" . $row['name'] . "</td>";
-                                        echo "<td><img src='../lectures/" . $row["profile_picture"] . "' alt='Profile' width='85'></td>";
+                                        echo "<td><img src='../lectures/" . $row["profile_picture"] . "' alt='Profile' width='150px' height='150px'></td>";
                                         echo "<td>" . $row['nic'] . "</td>";
                                         echo "<td>" . $row['email'] . "</td>";
                                         echo "<td>" . $row['mobile'] . "</td>";

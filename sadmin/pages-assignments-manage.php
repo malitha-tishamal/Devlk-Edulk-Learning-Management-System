@@ -18,17 +18,18 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 $stmt->close();
 
-// Query to fetch assigned subjects with lecturer name and concatenated subject details (code and name)
+// Query to fetch assigned subjects with lecturer name, profile picture and concatenated subject details
 $query = "SELECT la.id as assignment_id, 
                  la.lecturer_id, 
                  la.subject_id,
-                 l.username, 
+                 l.name, 
+                 l.profile_picture,
                  GROUP_CONCAT(s.code ORDER BY s.code) AS subject_codes, 
                  GROUP_CONCAT(s.name ORDER BY s.name) AS subject_names
           FROM lectures_assignment la
           JOIN lectures l ON la.lecturer_id = l.id
           JOIN subjects s ON la.subject_id = s.id
-          GROUP BY la.id"; // Group by assignment_id to ensure each row is unique
+          GROUP BY la.id";
 
 $result = $conn->query($query);
 
@@ -101,7 +102,15 @@ $result = $conn->query($query);
                                         <tbody>
                                             <?php while ($row = $result->fetch_assoc()): ?>
                                                 <tr>
-                                                    <td><?php echo htmlspecialchars($row['username']); ?></td>
+                                                    <td>
+    <div style="display:flex; align-items:center; justify-content:center;">
+        <img src="<?php echo '../lectures/' . ($row['profile_picture'] ? $row['profile_picture'] : 'uploads/profile_pictures/default.png'); ?>" 
+             alt="Profile" 
+             style="width:120px; height:120px; object-fit:cover; margin-right:10px;">
+        <span><?php echo htmlspecialchars($row['name']); ?></span>
+    </div>
+</td>
+
                                                     <td class="subject-list">
                                                         <?php
                                                         // Split the subject codes and names into an array
