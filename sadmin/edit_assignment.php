@@ -24,7 +24,7 @@ if (!isset($_GET['assignment_id'])) {
 $assignment_id = $_GET['assignment_id'];
 
 // Fetch the assignment details based on assignment_id
-$query = "SELECT la.id as assignment_id, la.lecturer_id, la.subject_id, l.username, s.code as subject_code, s.name as subject_name 
+$query = "SELECT la.id as assignment_id, la.lecturer_id, la.subject_id, l.name, s.code as subject_code, s.name as subject_name 
           FROM lectures_assignment la
           JOIN lectures l ON la.lecturer_id = l.id
           JOIN subjects s ON la.subject_id = s.id
@@ -45,7 +45,7 @@ $lecturer_id = $row['lecturer_id'];
 $subject_id = $row['subject_id'];
 
 // Fetch all lecturers and subjects for the dropdowns
-$lecturers_result = $conn->query("SELECT id, username FROM lectures");
+$lecturers_result = $conn->query("SELECT id, name FROM lectures");
 $subjects_result = $conn->query("SELECT id, code, name FROM subjects");
 
 $stmt->close();
@@ -93,7 +93,7 @@ $stmt->close();
                                         <select class="form-control w-50" name="lecturer_id" id="lecturer">
                                             <?php while ($lecturer = $lecturers_result->fetch_assoc()): ?>
                                                 <option value="<?php echo $lecturer['id']; ?>" <?php echo ($lecturer['id'] == $lecturer_id) ? 'selected' : ''; ?>>
-                                                    <?php echo htmlspecialchars($lecturer['username']); ?>
+                                                    <?php echo htmlspecialchars($lecturer['name']); ?>
                                                 </option>
                                             <?php endwhile; ?>
                                         </select>

@@ -91,11 +91,11 @@
                     </a>
                 </li>
 
-                <li>
+                <!--li>
                     <a href="pages-assign-subjects.php">
                         <i class="bi bi-circle"></i> <span>Assign Details</span>
                     </a>
-                </li>
+                </li-->
 
                 <li>
                     <a href="pages-assignments-manage.php">

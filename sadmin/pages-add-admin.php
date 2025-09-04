@@ -10,7 +10,7 @@ if (!isset($_SESSION['sadmin_id'])) {
 
 // Fetch user details
 $user_id = $_SESSION['sadmin_id'];
-$sql = "SELECT name, email, nic,mobile,profile_picture FROM sadmins WHERE id = ?";
+$sql = "SELECT name, email, nic, mobile, profile_picture FROM sadmins WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -25,13 +25,12 @@ $stmt->close();
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
     <title>Add Admin - EduWide</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <?php include_once ("../includes/css-links-inc.php"); ?>
-
+    
     <style>
         :root {
             --primary: #4361ee;
@@ -43,11 +42,6 @@ $stmt->close();
             --light: #f8f9fa;
             --dark: #212529;
             --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-        
-        body {
-            background-color: #f6f9ff;
-            color: #444444;
         }
         
         .card {
@@ -226,20 +220,7 @@ $stmt->close();
 <body>
 
     <?php include_once ("../includes/header.php") ?>
-
     <?php include_once ("../includes/sadmin-sidebar.php") ?>
-
-    <div class="toast-container top-50 start-50 translate-middle p-3">
-      <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <strong class="me-auto">Alert</strong>
-        </div>
-        <div class="toast-body" id="alert_msg">
-          <!--Message Here-->
-        </div>
-      </div>
-    </div>
-    <div id="toastBackdrop" class="toast-backdrop"></div>
 
     <main id="main" class="main">
 
@@ -256,17 +237,17 @@ $stmt->close();
 
         <section class="section">
             <div class="row">
-                <div class="col-12">
+                <div class="col-lg-8 mx-auto">
                     <div class="card">
-                        <div class="card-body pt-4">
+                        <div class="card-body">
                             <h5 class="card-title mb-4">Admin Registration Form</h5>
 
                             <form action="admin-register-process2.php" method="POST" class="needs-validation" novalidate>
 
                                 <div class="row mb-4">
-                                    <label for="name" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Full Name</label>
-                                    <div class="col-lg-9 col-md-8 col-sm-8">
-                                        <input type="text" class="form-control" id="name" name="name" required>
+                                    <label for="name" class="col-lg-3 col-md-4 col-form-label">Full Name</label>
+                                    <div class="col-lg-9 col-md-8">
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter admin's full name" required>
                                         <div class="invalid-feedback">
                                             Please enter the admin's full name
                                         </div>
@@ -274,8 +255,8 @@ $stmt->close();
                                 </div>
 
                                 <div class="row mb-4">
-                                    <label for="nicNumber" class="col-lg-3 col-md-4 col-sm-4 col-form-label">NIC Number</label>
-                                    <div class="col-lg-9 col-md-8 col-sm-8">
+                                    <label for="nicNumber" class="col-lg-3 col-md-4 col-form-label">NIC Number</label>
+                                    <div class="col-lg-9 col-md-8">
                                         <input type="text" class="form-control" id="nicNumber" name="nic" placeholder="e.g., 123456789V or 123456789X" oninput="this.value = this.value.toUpperCase(); validateNic(this);" required>
                                         <div class="invalid-feedback" id="nicErrorMessage">
                                             Please enter a valid NIC number
@@ -284,9 +265,9 @@ $stmt->close();
                                 </div>
 
                                 <div class="row mb-4">
-                                    <label for="email" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Email Address</label>
-                                    <div class="col-lg-9 col-md-8 col-sm-8">
-                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    <label for="email" class="col-lg-3 col-md-4 col-form-label">Email Address</label>
+                                    <div class="col-lg-9 col-md-8">
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" required>
                                         <div class="invalid-feedback">
                                             Please enter a valid email address
                                         </div>
@@ -294,8 +275,8 @@ $stmt->close();
                                 </div>
 
                                 <div class="row mb-4">
-                                    <label for="mobileNumber" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Mobile Number</label>
-                                    <div class="col-lg-9 col-md-8 col-sm-8">
+                                    <label for="mobileNumber" class="col-lg-3 col-md-4 col-form-label">Mobile Number</label>
+                                    <div class="col-lg-9 col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-text">+94</span>
                                             <input type="tel" class="form-control" id="mobileNumber" name="mobile" placeholder="712345678" oninput="validateMobile(this)" required>
@@ -307,12 +288,12 @@ $stmt->close();
                                 </div>
                                  
                                 <div class="row mb-4">
-                                    <label for="password" class="col-lg-3 col-md-4 col-sm-4 col-form-label">Password</label>
-                                    <div class="col-lg-9 col-md-8 col-sm-8">
+                                    <label for="password" class="col-lg-3 col-md-4 col-form-label">Password</label>
+                                    <div class="col-lg-9 col-md-8">
                                         <div class="input-group">
-                                            <input type="password" class="form-control" id="password" name="password" required>
-                                            <span class="input-group-text" id="inputGroupPrepend">
-                                                <i class="password-toggle-icon1 bx bxs-show" onclick="togglePasswordVisibility('password', 'password-toggle-icon1')"></i>
+                                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter secure password" required>
+                                            <span class="input-group-text">
+                                                <i class="bi bi-eye-slash password-toggle-icon1" onclick="togglePasswordVisibility('password')"></i>
                                             </span>
                                             <div class="invalid-feedback">
                                                 Please enter a secure password
@@ -325,6 +306,9 @@ $stmt->close();
                                 <div class="row mt-5">                        
                                     <div class="text-center">
                                         <input type="button" class="btn btn-primary btn-submit px-4" data-bs-toggle="modal" data-bs-target="#confirmSubmitModal" value="Create Admin Account">
+                                        <a href="manage-super-admins.php" class="btn btn-outline-secondary ms-2">
+                                            <i class="bi bi-arrow-left me-1"></i> Back to Admins
+                                        </a>
                                     </div>
                                 </div>
 
@@ -355,12 +339,8 @@ $stmt->close();
     </main>
 
     <?php include_once ("../includes/footer.php") ?>
-
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
     <?php include_once ("../includes/js-links-inc.php") ?>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         // Form validation
@@ -380,18 +360,18 @@ $stmt->close();
         })()
         
         // Password visibility toggle
-        function togglePasswordVisibility(inputId, iconId) {
+        function togglePasswordVisibility(inputId) {
             const passwordInput = document.getElementById(inputId);
-            const icon = document.querySelector('.' + iconId);
+            const icon = passwordInput.parentNode.querySelector('.password-toggle-icon1');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                icon.classList.remove('bxs-show');
-                icon.classList.add('bxs-hide');
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
             } else {
                 passwordInput.type = 'password';
-                icon.classList.remove('bxs-hide');
-                icon.classList.add('bxs-show');
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
             }
         }
         
@@ -425,40 +405,49 @@ $stmt->close();
         
         // Toast notification function
         function showToast(message, type = 'info') {
+            // Create toast element if it doesn't exist
+            if (!document.getElementById('liveToast')) {
+                const toastContainer = document.createElement('div');
+                toastContainer.className = 'toast-container top-50 start-50 translate-middle p-3';
+                toastContainer.innerHTML = `
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">Alert</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body" id="alert_msg"></div>
+                    </div>
+                `;
+                document.body.appendChild(toastContainer);
+            }
+            
             const toast = document.getElementById('liveToast');
             const toastBody = document.getElementById('alert_msg');
-            const toastBackdrop = document.getElementById('toastBackdrop');
             
-            // Set message and style based on type
+            // Set message
             toastBody.textContent = message;
             
             // Remove previous type classes
-            toast.classList.remove('bg-primary', 'bg-success', 'bg-danger', 'bg-warning');
+            toast.classList.remove('bg-primary', 'bg-success', 'bg-danger', 'bg-warning', 'text-white');
             
             // Add appropriate class based on type
             switch(type) {
                 case 'success':
-                    toast.classList.add('bg-success');
+                    toast.classList.add('bg-success', 'text-white');
                     break;
                 case 'error':
-                    toast.classList.add('bg-danger');
+                    toast.classList.add('bg-danger', 'text-white');
                     break;
                 case 'warning':
-                    toast.classList.add('bg-warning');
+                    toast.classList.add('bg-warning', 'text-white');
                     break;
                 default:
-                    toast.classList.add('bg-primary');
+                    toast.classList.add('bg-primary', 'text-white');
             }
             
-            // Show toast and backdrop
-            toastBackdrop.style.display = 'block';
+            // Show toast
             const bsToast = new bootstrap.Toast(toast);
             bsToast.show();
-            
-            // Hide backdrop when toast is hidden
-            toast.addEventListener('hidden.bs.toast', function () {
-                toastBackdrop.style.display = 'none';
-            });
         }
         
         // Show toast if there's a message in session

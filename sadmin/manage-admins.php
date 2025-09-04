@@ -97,10 +97,18 @@ $result = $conn->query($sql);
         .admin-avatar {
             width: 150px;
             height: 150px;
-            border-radius: 10%;
             object-fit: cover;
             border: 2px solid #fff;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .admin-avatar-large {
+            width: 250px;
+            height: 250px;
+            border-radius: 10%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
         .status-badge {
@@ -231,6 +239,11 @@ $result = $conn->query($sql);
             
             .table-responsive {
                 overflow-x: auto;
+            }
+            
+            .admin-avatar {
+                width: 40px;
+                height: 40px;
             }
         }
     </style>
@@ -421,7 +434,7 @@ $result = $conn->query($sql);
                                                 echo "<td class='text-center action-buttons'>";
                                                 
                                                 // View button
-                                                echo "<button class='btn btn-sm btn-info view-btn' data-id='{$row['id']}' data-bs-toggle='tooltip' title='View Details'>
+                                                echo "<button class='btn btn-sm btn-info view-btn' data-id='{$row['id']}' data-name='" . htmlspecialchars($row['name']) . "' data-email='" . htmlspecialchars($row['email']) . "' data-nic='" . htmlspecialchars($row['nic']) . "' data-mobile='" . htmlspecialchars($row['mobile']) . "' data-created='" . htmlspecialchars($row['created_at']) . "' data-login='" . htmlspecialchars($row['last_login']) . "' data-status='" . htmlspecialchars($row['status']) . "' data-profile='" . htmlspecialchars($row['profile_picture']) . "' data-bs-toggle='tooltip' title='View Details'>
                                                         <i class='bi bi-eye'></i>
                                                       </button>";
                                                       
@@ -542,8 +555,16 @@ $result = $conn->query($sql);
             document.querySelectorAll('.view-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = btn.getAttribute('data-id');
-                    // In a real implementation, you would fetch data via AJAX
-                    // For now, we'll just show a placeholder
+                    const name = btn.getAttribute('data-name');
+                    const email = btn.getAttribute('data-email');
+                    const nic = btn.getAttribute('data-nic');
+                    const mobile = btn.getAttribute('data-mobile');
+                    const created = btn.getAttribute('data-created');
+                    const login = btn.getAttribute('data-login');
+                    const status = btn.getAttribute('data-status');
+                    const profile = btn.getAttribute('data-profile');
+                    
+                    // Display loading state
                     document.getElementById('adminDetails').innerHTML = `
                         <div class="text-center py-4">
                             <div class="spinner-border text-primary" role="status">
@@ -556,14 +577,31 @@ $result = $conn->query($sql);
                     const myModal = new bootstrap.Modal(document.getElementById('viewAdminModal'));
                     myModal.show();
                     
-                    // Simulate AJAX loading
+                    // Set a timeout to simulate loading, then display the data
                     setTimeout(() => {
+                        let statusBadge = '';
+                        switch(status.toLowerCase()) {
+                            case 'active':
+                            case 'approved':
+                                statusBadge = '<span class="badge bg-success status-badge">Approved</span>';
+                                break;
+                            case 'disabled':
+                                statusBadge = '<span class="badge bg-danger status-badge">Disabled</span>';
+                                break;
+                            case 'pending':
+                                statusBadge = '<span class="badge bg-warning status-badge">Pending</span>';
+                                break;
+                            default:
+                                statusBadge = `<span class="badge bg-secondary status-badge">${status}</span>`;
+                        }
+                        
                         document.getElementById('adminDetails').innerHTML = `
                             <div class="row">
                                 <div class="col-md-4 text-center">
-                                    <img src="../assets/img/profile-img.jpg" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                                    <h4>Admin Name</h4>
+                                    <img src="${profile}" class="admin-avatar-large mb-3">
+                                    <h4>${name}</h4>
                                     <p class="text-muted">Admin ID: ${id}</p>
+                                    ${statusBadge}
                                 </div>
                                 <div class="col-md-8">
                                     <div class="row mb-3">
@@ -571,7 +609,7 @@ $result = $conn->query($sql);
                                             <p class="mb-0 fw-semibold">Email</p>
                                         </div>
                                         <div class="col-sm-8">
-                                            <p class="text-muted mb-0">admin${id}@example.com</p>
+                                            <p class="text-muted mb-0">${email}</p>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -579,7 +617,7 @@ $result = $conn->query($sql);
                                             <p class="mb-0 fw-semibold">NIC</p>
                                         </div>
                                         <div class="col-sm-8">
-                                            <p class="text-muted mb-0">123456789V</p>
+                                            <p class="text-muted mb-0">${nic}</p>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -587,7 +625,7 @@ $result = $conn->query($sql);
                                             <p class="mb-0 fw-semibold">Mobile</p>
                                         </div>
                                         <div class="col-sm-8">
-                                            <p class="text-muted mb-0">+94 77 123 4567</p>
+                                            <p class="text-muted mb-0">${mobile}</p>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -595,7 +633,7 @@ $result = $conn->query($sql);
                                             <p class="mb-0 fw-semibold">Account Created</p>
                                         </div>
                                         <div class="col-sm-8">
-                                            <p class="text-muted mb-0">2023-05-15 10:30:45</p>
+                                            <p class="text-muted mb-0">${created}</p>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -603,13 +641,13 @@ $result = $conn->query($sql);
                                             <p class="mb-0 fw-semibold">Last Login</p>
                                         </div>
                                         <div class="col-sm-8">
-                                            <p class="text-muted mb-0">2023-10-20 14:22:18</p>
+                                            <p class="text-muted mb-0">${login}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         `;
-                    }, 800);
+                    }, 500);
                 });
             });
         });
