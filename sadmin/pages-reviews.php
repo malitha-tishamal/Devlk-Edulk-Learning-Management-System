@@ -289,6 +289,7 @@ $student_reviews = $conn->query("SELECT sr.*, s.profile_picture, s.name, s.regno
 </div>
 
 <?php include_once("../includes/js-links-inc.php"); ?>
+<?php include_once("../includes/footer.php") ?>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
   // --- Restore last active tab ---

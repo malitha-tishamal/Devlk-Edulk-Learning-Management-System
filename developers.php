@@ -1,3 +1,23 @@
+<?php
+session_start();
+require_once '../includes/db-conn.php';
+
+if (!isset($_SESSION['sadmin_id'])) {
+    header("Location: ../index.php");
+    exit();
+}
+
+$user_id = $_SESSION['sadmin_id'];
+$sql = "SELECT name, email, nic, mobile, profile_picture FROM sadmins WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -90,16 +110,18 @@
 
 <body>
 
-    <!-- ======= Header ======= -->
-    <header id="header" class="header fixed-top d-flex align-items-center">
-        <div class="d-flex align-items-center justify-content-between">
-            <a href="pages-home.php" class="logo d-flex align-items-center">
-                <img src="assets/images/logos/favicon.png" width="50px" alt="Logo">
-                <span class="d-none d-lg-block">Edulk</span>
-            </a>
-        </div>
-    </header>
-    <!-- End Header -->
+<?php include_once("../includes/header.php") ?>
+<?php include_once("../includes/sadmin-sidebar.php") ?>
+
+<div class="pagetitle">
+        <h1 class="page-title">Manage Resources</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                <li class="breadcrumb-item active">Developer Team</li>
+            </ol>
+        </nav>
+    </div>
 
     <section class="team-section container">
         <h1 class="mb-5 text-primary fw-bold text-center">Developer</h1>
@@ -107,7 +129,7 @@
 
             <div class="col-md-4 col-sm-6">
                 <div class="team-card text-center">
-                    <img src="assets/images/Developers/malitha3.jpg" alt="Team Member">
+                    <img src="../assets/images/Developers/malitha3.jpg" alt="Team Member">
                     <h4 class="fw-bold">Malitha Tishmal</h4>
                     <h6 class="fw-bold">Lucifer23</h6>
                     <p class="role">Full Stack Developer</p>
@@ -124,11 +146,9 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <div class="dev-footer">
-        <p>&copy; Copyright <strong><span>Edulk</span></strong> All Rights Reserved</p>
-        <p>Developed by <a href="https://malithatishamal.42web.io/?i=1#about">Devlk - Malitha Tishmal</a></p>
-    </div>
+<?php include_once("../includes/footer.php") ?>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<?php include_once("../includes/js-links-inc.php") ?>
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
         <i class="bi bi-arrow-up-short"></i>

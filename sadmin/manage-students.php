@@ -43,6 +43,22 @@ $result = $conn->query($sql);
 $yearQuery = "SELECT DISTINCT batch_year AS year FROM students ORDER BY year DESC";
 $yearResult = $conn->query($yearQuery);
 
+// Get live statistics
+$totalStudentsQuery = "SELECT COUNT(*) as count FROM students";
+$activeStudentsQuery = "SELECT COUNT(*) as count FROM students WHERE status = 'active' OR status = 'approved'";
+$pendingStudentsQuery = "SELECT COUNT(*) as count FROM students WHERE status = 'pending'";
+$disabledStudentsQuery = "SELECT COUNT(*) as count FROM students WHERE status = 'disabled' OR status = 'rejected'";
+
+$totalStudentsResult = $conn->query($totalStudentsQuery);
+$activeStudentsResult = $conn->query($activeStudentsQuery);
+$pendingStudentsResult = $conn->query($pendingStudentsQuery);
+$disabledStudentsResult = $conn->query($disabledStudentsQuery);
+
+$totalStudents = $totalStudentsResult->fetch_assoc()['count'];
+$activeStudents = $activeStudentsResult->fetch_assoc()['count'];
+$pendingStudents = $pendingStudentsResult->fetch_assoc()['count'];
+$disabledStudents = $disabledStudentsResult->fetch_assoc()['count'];
+
 ?>
 
 <!DOCTYPE html>
@@ -294,7 +310,7 @@ $yearResult = $conn->query($yearQuery);
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-          <li class="breadcrumb-item active">Students</li>
+          <li classbreadcrumb-item active">Students</li>
         </ol>
       </nav>
     </div>
@@ -305,28 +321,28 @@ $yearResult = $conn->query($yearQuery);
         <div class="col-lg-3 col-md-6">
           <div class="stats-card">
             <i class="bi bi-people"></i>
-            <h3>1,258</h3>
+            <h3><?php echo $totalStudents; ?></h3>
             <p>Total Students</p>
           </div>
         </div>
         <div class="col-lg-3 col-md-6">
           <div class="stats-card">
             <i class="bi bi-check-circle"></i>
-            <h3>924</h3>
+            <h3><?php echo $activeStudents; ?></h3>
             <p>Active Students</p>
           </div>
         </div>
         <div class="col-lg-3 col-md-6">
           <div class="stats-card">
             <i class="bi bi-clock-history"></i>
-            <h3>186</h3>
+            <h3><?php echo $pendingStudents; ?></h3>
             <p>Pending Approval</p>
           </div>
         </div>
         <div class="col-lg-3 col-md-6">
           <div class="stats-card">
             <i class="bi bi-x-circle"></i>
-            <h3>148</h3>
+            <h3><?php echo $disabledStudents; ?></h3>
             <p>Disabled Accounts</p>
           </div>
         </div>

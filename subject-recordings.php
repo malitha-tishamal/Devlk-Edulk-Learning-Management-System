@@ -36,20 +36,29 @@ if (!$subject) {
 // Get recordings for this subject
 $recordings = [];
 $recordingStmt = $conn->prepare("
-    SELECT r.*, 
+    SELECT 
+    r.*,
     CASE 
         WHEN r.role = 'superadmin' THEN sa.name
         WHEN r.role = 'lecture' THEN l.name
         ELSE 'Admin'
     END AS uploader_name,
-    IFNULL(rsp.plays_left, r.view_limit_minutes) AS plays_left
-    FROM recordings r
-    LEFT JOIN sadmins sa ON r.created_by = sa.id AND r.role = 'superadmin'
-    LEFT JOIN lectures l ON r.created_by = l.id AND r.role = 'lecture'
-    LEFT JOIN recording_student_plays rsp 
-        ON rsp.recording_id = r.id AND rsp.student_id = ?
-    WHERE r.subject_id = ? AND r.status = 'active'
-    ORDER BY r.release_time DESC
+    COALESCE(rsp.plays_left, r.view_limit_minutes) AS plays_left
+FROM recordings r
+LEFT JOIN sadmins sa 
+       ON r.created_by = sa.id 
+      AND r.role = 'superadmin'
+LEFT JOIN lectures l 
+       ON r.created_by = l.id 
+      AND r.role = 'lecture'
+LEFT JOIN recording_student_plays rsp 
+       ON rsp.recording_id = r.id 
+      AND rsp.student_id = ?
+WHERE r.subject_id = ? 
+  AND r.status = 'active'
+  AND r.access_level IN ('public', 'batch')   -- ✅ filter like in your previous query
+ORDER BY r.release_time DESC;
+
 ");
 $recordingStmt->bind_param("ii", $user_id, $subject_id);
 $recordingStmt->execute();
@@ -173,6 +182,7 @@ $recordingStmt->close();
         }
 
         .recording-card {
+            width : 500px;
             background: white;
             border-radius: var(--border-radius);
             overflow: hidden;

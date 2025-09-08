@@ -29,7 +29,7 @@ $gender = isset($user['gender']) ? $user['gender'] : '';
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>User Profile - EduWide</title>
+    <title>User Profile - Edulk</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
     <?php include_once ("../includes/css-links-inc.php"); ?>
@@ -395,7 +395,7 @@ $gender = isset($user['gender']) ? $user['gender'] : '';
         </section>
     </main>
 
-    <?php include_once ("../includes/footer3.php") ?>
+    <?php include_once ("../includes/footer.php") ?>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <?php include_once ("../includes/js-links-inc.php") ?>
     
