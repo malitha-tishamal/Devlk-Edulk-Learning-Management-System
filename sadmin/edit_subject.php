@@ -57,23 +57,155 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Edit Subject - <?php echo $subject['name']; ?> - Edulk</title>
 
     <?php include_once("../includes/css-links-inc.php"); ?>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-blue: #1976D2;
+            --secondary-blue: #2196F3;
+            --light-blue: #E3F2FD;
+            --dark-blue: #0D47A1;
+            --accent-blue: #82B1FF;
+            --text-dark: #323232;
+            --text-light: #767676;
+            --white: #FFFFFF;
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f9ff;
+            color: var(--text-dark);
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .breadcrumb-item a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .page-title {
+            color: var(--dark-blue);
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .edit-container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+        }
+
+        .form-header {
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-title {
+            color: var(--dark-blue);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-title i {
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 15px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.15);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-blue);
+            border-color: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-secondary {
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-outline-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eaeaea;
+        }
+
+        @media (max-width: 768px) {
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
     <?php include_once("../includes/header.php") ?>
-
     <?php include_once("../includes/sadmin-sidebar.php") ?>
 
     <main id="main" class="main">
-        <div class="pagetitle">
-            <h1>Edit Subject</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="">Home</a></li>
-                    <li class="breadcrumb-item"><a href="">Subjects</a></li>
-                    <li class="breadcrumb-item"><a href="">Edit</a></li>
-                    <li class="breadcrumb-item"><a href="">Edit Subject - <?php echo $subject['name']; ?></a></li>
+        <!-- Header -->
+        <div class="header">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="pages-courses.php">Subjects</a></li>
+                    <li class="breadcrumb-item active">Edit Subject</li>
                 </ol>
             </nav>
         </div>
@@ -81,30 +213,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                                <form action="edit_subject.php?subject_id=<?php echo $subject['id']; ?>" method="post">
-
-                                    <h3 class=" mb-4 mt-2 card-title">Edit Subject - <?php echo $subject['name']; ?></h3>
-
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Subject Code</label>
-                                        <input type="text" class="form-control w-50" id="code" name="code" value="<?php echo $subject['code']; ?>" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Subject Name</label>
-                                        <input type="text" class="form-control w-50" id="name" name="name" value="<?php echo $subject['name']; ?>" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="description" class="form-label">Subject Description</label>
-                                        <textarea class="form-control w-50" id="description" name="description" rows="3" required><?php echo $subject['description']; ?></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-success ">Update Subject</button>
-                                    <a href="pages-courses.php" class="btn btn-danger">Cancel</a>
-                                </form>
-                            </div>
+                    <div class="edit-container">
+                        <div class="form-header">
+                            <h2 class="form-title">
+                                <i class="bi bi-pencil-square"></i>
+                                Edit Subject - <?php echo $subject['name']; ?>
+                            </h2>
+                            <p class="text-muted">Update the subject details below</p>
                         </div>
+
+                        <form action="edit_subject.php?subject_id=<?php echo $subject['id']; ?>" method="post">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="code" class="form-label">Subject Code</label>
+                                    <input type="text" class="form-control" id="code" name="code" value="<?php echo $subject['code']; ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Subject Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="<?php echo $subject['name']; ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-8">
+                                    <label for="description" class="form-label">Subject Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="4" required><?php echo $subject['description']; ?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle"></i> Update Subject
+                                </button>
+                                <a href="pages-courses.php" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-circle"></i> Cancel
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -121,6 +269,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </html>
 
 <?php
-
 $conn->close();
 ?>

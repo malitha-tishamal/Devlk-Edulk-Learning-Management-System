@@ -542,6 +542,27 @@ document.addEventListener("DOMContentLoaded", function() {
     <?php include_once ("includes/footer.php") ?>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <?php include_once ("includes/js-links-inc.php") ?>
+
+
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    // Check if browser supports Notifications
+    if ("Notification" in window) {
+        if (Notification.permission === "default") {
+            // Ask user only first time
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    new Notification("✅ Access Granted!", {
+                        body: "You will now receive site messages.",
+                        icon: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                    });
+                }
+            });
+        }
+    }
+});
+</script>
+
     
     <script>
         function togglePasswordVisibility(inputId, iconId) {

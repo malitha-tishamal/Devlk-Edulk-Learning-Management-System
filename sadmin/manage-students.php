@@ -375,7 +375,7 @@ $disabledStudents = $disabledStudentsResult->fetch_assoc()['count'];
                         if ($yearResult->num_rows > 0) {
                           while ($y = $yearResult->fetch_assoc()) {
                             $yearVal = $y['year'];
-                            $selected = ($study_year == $yearVal) ? 'selected' : '';
+                            $selected = ($study_year == $yearVal) ? : '';
                             echo "<option value='$yearVal' $selected>$yearVal</option>";
                           }
                         }
