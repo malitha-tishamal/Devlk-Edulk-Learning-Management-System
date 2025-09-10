@@ -144,6 +144,12 @@
                         <i class="bi bi-circle"></i> <span>Students Socia Media </span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="pages-students-birthdays.php">
+                        <i class="bi bi-circle"></i> <span>Students Birthdays </span>
+                    </a>
+                </li>
             </ul>
         </li>
 
@@ -260,4 +266,38 @@
         </li>
 
     </ul>
+
+
+    <script>
+function sendBirthdayNotifications() {
+    if ("Notification" in window && Notification.permission === "granted") {
+        fetch("birthday-message.php")
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(msg => {
+                    new Notification(msg.title, {
+                        body: msg.body,
+                        icon: msg.icon
+                    });
+                });
+            })
+            .catch(err => console.error(err));
+    }
+}
+
+// Request permission & send notifications
+if ("Notification" in window) {
+    if (Notification.permission === "default") {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                sendBirthdayNotifications();
+            }
+        });
+    } else if (Notification.permission === "granted") {
+        sendBirthdayNotifications();
+    }
+}
+</script>
+
+
 </aside><!-- End Sidebar -->

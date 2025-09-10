@@ -28,6 +28,7 @@ if ($_SESSION['login_attempts'] >= 3) {
 if (isset($_POST['submit'])) {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
+    $remember = isset($_POST['remember']); // check "remember me"
     $current_time = date("Y-m-d H:i:s");
     $tables = ['sadmins','admins','students','lectures'];
 
@@ -51,7 +52,7 @@ if (isset($_POST['submit'])) {
                 $_SESSION['login_attempts'] = 0; 
                 $_SESSION['lockout_stage'] = 0;
 
-                // ---------------- Set session & redirect ----------------
+                // ---------------- Set session ----------------
                 if ($table==='students') {
                     $_SESSION['student_id'] = $user['id'];
                     $_SESSION['student_name'] = $user['name'];
@@ -80,6 +81,18 @@ if (isset($_POST['submit'])) {
                 if ($stmt_upd = $conn->prepare("UPDATE $table SET last_login=? WHERE id=?")) {
                     $stmt_upd->bind_param("si",$current_time,$user['id']); 
                     $stmt_upd->execute();
+                }
+
+                // ---------------- Remember Me ----------------
+                if ($remember) {
+                    $token = bin2hex(random_bytes(16)); 
+                    setcookie("remember_token", $token, time() + (86400 * 30), "/", "", true, true);
+
+                    // save token in DB (add remember_token column first)
+                    if ($stmt_rem = $conn->prepare("UPDATE $table SET remember_token=? WHERE id=?")) {
+                        $stmt_rem->bind_param("si", $token, $user['id']);
+                        $stmt_rem->execute();
+                    }
                 }
 
                 // ---------------- Insert into logs ----------------

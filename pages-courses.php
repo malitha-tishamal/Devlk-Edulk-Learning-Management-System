@@ -31,7 +31,7 @@ $semesters = $conn->query("SELECT DISTINCT semester FROM subjects ORDER BY semes
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Courses | Student Portal</title>
+    <title>Courses | Student Portal - Edulk</title>
 
     <?php include_once("includes/css-links-inc.php"); ?>
     
@@ -241,6 +241,10 @@ $semesters = $conn->query("SELECT DISTINCT semester FROM subjects ORDER BY semes
             font-size: 1.1rem;
             margin-bottom: 0;
         }
+        .ico{
+            color: blue;
+            width:50px;
+        }
         
         @media (max-width: 768px) {
             .courses-header {
@@ -304,6 +308,7 @@ $semesters = $conn->query("SELECT DISTINCT semester FROM subjects ORDER BY semes
                             echo '    <span class="course-badge">Course</span>';
                             echo '  </div>';
                             echo '  <div class="course-body">';
+                            echo '  <i class="bi bi-book-half ico"></i>';
                             echo '    <p class="course-description">' . $row['description'] . '</p>';
                             echo '    <div class="course-meta">';
                             echo '      <span class="semester-tag">Semester ' . $row['semester'] . '</span>';

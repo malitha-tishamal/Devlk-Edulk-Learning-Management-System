@@ -1,4 +1,20 @@
-<?php session_start();
+<?php
+$lifetime = 60 * 60 * 24 * 30; // 30 days
+
+ini_set('session.gc_maxlifetime', $lifetime);
+
+session_set_cookie_params([
+    'lifetime' => $lifetime,
+    'path' => '/',
+    'domain' => $_SERVER['HTTP_HOST'],
+    'secure' => isset($_SERVER['HTTPS']),
+    'httponly' => true,
+    'samesite' => 'Lax'
+]);
+
+session_start();
+
+
 date_default_timezone_set('Asia/Colombo');
  ?>
 
@@ -95,6 +111,11 @@ date_default_timezone_set('Asia/Colombo');
                                               <div class="invalid-feedback">Please enter your password!</div>
                                           </div>
                                         </div>
+                                        <div class="col-12">
+  <input type="checkbox" name="remember" id="remember">
+  <label for="remember"> Remember Me</label>
+</div>
+
 
                                         <!--div class="col-12">
                                           <p class="small mb-0" style="font-size:14px;"><a href="pages-forgotten-password.php">Forgotten password</a>

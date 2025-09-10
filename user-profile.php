@@ -1,5 +1,18 @@
 <?php
+// Keep session alive for 30 days (even if browser/tab closed)
+$lifetime = 60 * 60 * 24 * 30; // 30 days
+
+session_set_cookie_params([
+    'lifetime' => $lifetime,
+    'path' => '/',
+    'domain' => $_SERVER['HTTP_HOST'],
+    'secure' => isset($_SERVER['HTTPS']), // HTTPS site nam true karanna
+    'httponly' => true,
+    'samesite' => 'Lax'
+]);
+
 session_start();
+
 require_once 'includes/db-conn.php';
 
 // Redirect if not logged in
@@ -36,95 +49,138 @@ $gender = isset($user['gender']) ? $user['gender'] : '';
     <style>
         :root {
             --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --primary-light: #5f73f2;
             --secondary: #3f37c9;
             --success: #4cc9f0;
             --info: #4895ef;
             --warning: #f72585;
             --light: #f8f9fa;
             --dark: #212529;
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --card-shadow: 0 10px 30px rgba(67, 97, 238, 0.15);
+            --gradient-primary: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+            --gradient-secondary: linear-gradient(135deg, #3f37c9 0%, #2a2492 100%);
+            --gradient-success: linear-gradient(135deg, #4cc9f0 0%, #3a9bc2 100%);
         }
         
         body {
-            background-color: #f8f9fa;
+            background-color: #f5f7ff;
             font-family: 'Poppins', sans-serif;
             color: #495057;
+            background-image: 
+                radial-gradient(circle at 5% 10%, rgba(67, 97, 238, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(63, 55, 201, 0.05) 0%, transparent 20%);
         }
         
         .card {
-            border-radius: 12px;
+            border-radius: 16px;
             box-shadow: var(--card-shadow);
             border: none;
             margin-bottom: 1.5rem;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
         }
         
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 15px 35px rgba(67, 97, 238, 0.2);
+        }
+        
+        .card-header {
+            background: var(--gradient-primary);
+            color: white;
+            border-bottom: none;
+            padding: 1.2rem 1.5rem;
+            font-weight: 600;
         }
         
         .card-body {
-            padding: 1.5rem;
+            padding: 1.8rem;
         }
         
         .btn {
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 500;
-            padding: 0.5rem 1rem;
-            transition: all 0.2s ease;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.3s ease;
+            border: none;
         }
         
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .btn-primary {
+            background: var(--gradient-primary);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
         }
         
         .btn-sm {
-            padding: 0.4rem 0.8rem;
+            padding: 0.5rem 1rem;
             font-size: 0.875rem;
+        }
+        
+        .nav-tabs {
+            border-bottom: 2px solid rgba(67, 97, 238, 0.1);
+            margin-bottom: 1.5rem;
         }
         
         .nav-tabs .nav-link {
             color: #6c757d;
             font-weight: 500;
             border: none;
-            padding: 0.75rem 1.25rem;
-            border-radius: 8px 8px 0 0;
+            padding: 0.9rem 1.5rem;
+            border-radius: 10px 10px 0 0;
+            margin-right: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
         }
         
         .nav-tabs .nav-link.active {
-            color: var(--primary);
+            color: white;
             font-weight: 600;
-            border-bottom: 3px solid var(--primary);
-            background-color: transparent;
+            background: var(--gradient-primary);
+            border: none;
+            box-shadow: 0 -5px 15px rgba(67, 97, 238, 0.2);
         }
         
         .profile-img {
-            width: 250px;
-            height: 250px;
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #fff;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 5px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .profile-img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
         
         .form-control, .form-select {
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            border: 1px solid #ced4da;
+            border-radius: 10px;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #e1e5ee;
             transition: all 0.3s;
         }
         
         .form-control:focus, .form-select:focus {
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.15);
             border-color: var(--primary);
         }
         
         .label {
             font-weight: 600;
             color: #495057;
-            padding-top: 0.5rem;
+            padding-top: 0.6rem;
         }
         
         /* Notification popup */
@@ -133,18 +189,24 @@ $gender = isset($user['gender']) ? $user['gender'] : '';
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 15px 25px;
-            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            padding: 15px 30px;
+            background: var(--gradient-success);
             color: white;
             font-weight: 600;
-            border-radius: 10px;
+            border-radius: 12px;
             display: none;
             z-index: 9999;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.5s ease-out;
         }
         
         .error-popup {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+        
+        @keyframes slideIn {
+            from { top: -100px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
         }
         
         /* Radio button styling */
@@ -160,22 +222,35 @@ $gender = isset($user['gender']) ? $user['gender'] : '';
         }
         
         .radio-option input[type="radio"] {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
         }
         
         /* Social media icons */
         .social-icon {
-            font-size: 1.2rem;
-            margin-right: 0.5rem;
+            font-size: 1.3rem;
+            margin-right: 0.7rem;
             color: var(--primary);
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            color: var(--secondary);
+            transform: scale(1.2);
         }
         
         /* Password toggle */
+        .input-group {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
         .input-group-text {
             background: transparent;
             border-left: none;
             cursor: pointer;
+            transition: all 0.3s;
         }
         
         .input-group .form-control {
@@ -186,17 +261,103 @@ $gender = isset($user['gender']) ? $user['gender'] : '';
             border-color: var(--primary);
         }
         
+        .input-group-text:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        /* Breadcrumb styling */
+        .breadcrumb-item a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        /* Main content area */
+        .main {
+            background-color: transparent;
+        }
+        
+        .pagetitle {
+            margin-bottom: 2rem;
+        }
+        
+        .pagetitle h1 {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .profile-img {
-                width: 150px;
-                height: 150px;
+                width: 180px;
+                height: 180px;
             }
             
             .radio-group {
                 flex-direction: column;
                 gap: 1rem;
             }
+            
+            .card-body {
+                padding: 1.2rem;
+            }
+        }
+        
+        /* Custom file upload button */
+        .form-control[type="file"] {
+            padding: 0.5rem;
+        }
+        
+        .form-control[type="file"]::file-selector-button {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin-right: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control[type="file"]::file-selector-button:hover {
+            background: var(--gradient-secondary);
+            cursor: pointer;
+        }
+        
+        /* Invalid feedback styling */
+        .invalid-feedback {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+        
+        .was-validated .form-control:invalid, .form-control.is-invalid {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.15);
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .back-to-top:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+            color: white;
         }
     </style>
 </head>
@@ -327,15 +488,15 @@ document.addEventListener("DOMContentLoaded", function() {
                                             <form action="update-profile-picture.php" method="POST" enctype="multipart/form-data">
                                                 <div class="d-flex flex-column align-items-center">
                                                     <input type="file" name="profile_picture" class="form-control form-control-sm mb-2" accept="image/*" required>
-                                                    <input type="submit" name="submit" value="Update Picture" class="btn btn-primary btn-sm">
+                                                    <input type="submit" name="submit" value="Update Picture" class="btn btn-primary btn-sm mt-2">
                                                 </div>
                                             </form>
                                         </div>
                                         
                                         <div class="col-lg-9 col-md-8">
                                             <div class="card">
-                                                <div class="card-header bg-transparent">
-                                                    <h5 class="card-title mb-0">Personal Information</h5>
+                                                <div class="card-header">
+                                                    <h5 class="card-title mb-0 text-white">Personal Information</h5>
                                                 </div>
                                                 <div class="card-body">
                                                     <form action="update-profile.php" method="POST">
@@ -428,50 +589,180 @@ document.addEventListener("DOMContentLoaded", function() {
                                                         </div>
 
                                                         <div class="text-center">
-                                                            <input type="submit" name="submit" value="Update Profile" class="btn btn-primary">
+                                                            <input type="submit" name="submit" value="Update Profile" class="btn btn-primary px-4">
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
                                             
                                             <div class="card mt-4">
-                                                <div class="card-header bg-transparent">
-                                                    <h5 class="card-title mb-0">Social Media Profiles</h5>
+                                                <div class="card-header">
+                                                    <h5 class="card-title mb-0 text-white">Social Media Profiles</h5>
                                                 </div>
                                                 <div class="card-body">
                                                     <form action="update-socialmedia.php" method="POST">
-                                                        <div class="row mb-3">
-                                                            <div class="col-lg-3 col-md-4 label"><span class="social-icon"><i class="bi bi-linkedin"></i></span> LinkedIn</div>
-                                                            <div class="col-lg-9 col-md-8">
-                                                                <input type="text" name="linkedin" class="form-control" placeholder="https://www.linkedin.com/username" value="<?php echo htmlspecialchars($user['linkedin']); ?>">
-                                                            </div>
-                                                        </div>
+    <!-- Existing Platforms -->
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-linkedin"></i> LinkedIn<font color='red' size='5'>*</font></div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="linkedin" class="form-control"
+                   placeholder="https://www.linkedin.com/username"
+                   value="<?php echo htmlspecialchars($user['linkedin']); ?>" required>
+        </div>
+    </div>
 
-                                                        <div class="row mb-3">
-                                                            <div class="col-lg-3 col-md-4 label"><span class="social-icon"><i class="bi bi-globe"></i></span> Personal Blog</div>
-                                                            <div class="col-lg-9 col-md-8">
-                                                                <input type="text" name="blog" class="form-control" placeholder="https://www.yourblogname.com" value="<?php echo htmlspecialchars($user['blog']); ?>">
-                                                            </div>
-                                                        </div>                                       
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-globe"></i> Personal Blog</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="blog" class="form-control"
+                   placeholder="https://www.yourblog.com"
+                   value="<?php echo htmlspecialchars($user['blog']); ?>">
+        </div>
+    </div>
 
-                                                        <div class="row mb-3">
-                                                            <div class="col-lg-3 col-md-4 label"><span class="social-icon"><i class="bi bi-github"></i></span> Github</div>
-                                                            <div class="col-lg-9 col-md-8">
-                                                                <input type="text" name="github" class="form-control" placeholder="https://www.github.com/username" value="<?php echo htmlspecialchars($user['github']); ?>">
-                                                            </div>
-                                                        </div>
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-github"></i> GitHub<font color='red' size='5'>*</font></div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="github" class="form-control"
+                   placeholder="https://github.com/username"
+                   value="<?php echo htmlspecialchars($user['github']); ?>" required>
+        </div>
+    </div>
 
-                                                        <div class="row mb-3">
-                                                            <div class="col-lg-3 col-md-4 label"><span class="social-icon"><i class="bi bi-facebook"></i></span> Facebook</div>
-                                                            <div class="col-lg-9 col-md-8">
-                                                                <input type="text" name="facebook" class="form-control" placeholder="https://www.facebook.com/username" value="<?php echo htmlspecialchars($user['facebook']); ?>">
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="text-center">
-                                                            <input type="submit" name="submit" value="Update Social Media" class="btn btn-primary">
-                                                        </div>
-                                                    </form>
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-whatsapp"></i> WhatsApp <font color='red' size='5'>*</font></div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="whatsapp" class="form-control"
+                   placeholder="https://wa.me/947XXXXXXXX"
+                   value="<?php echo htmlspecialchars($user['whatsapp']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-facebook"></i> Facebook</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="facebook" class="form-control"
+                   placeholder="https://facebook.com/username"
+                   value="<?php echo htmlspecialchars($user['facebook']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-twitter-x"></i> Twitter / X</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="twitter" class="form-control"
+                   placeholder="https://twitter.com/username"
+                   value="<?php echo htmlspecialchars($user['twitter']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-instagram"></i> Instagram</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="instagram" class="form-control"
+                   placeholder="https://instagram.com/username"
+                   value="<?php echo htmlspecialchars($user['instagram']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-youtube"></i> YouTube</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="youtube" class="form-control"
+                   placeholder="https://youtube.com/@username"
+                   value="<?php echo htmlspecialchars($user['youtube']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-tiktok"></i> TikTok</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="tiktok" class="form-control"
+                   placeholder="https://tiktok.com/@username"
+                   value="<?php echo htmlspecialchars($user['tiktok']); ?>">
+        </div>
+    </div>
+        <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-telegram"></i> Telegram</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="telegram" class="form-control"
+                   placeholder="https://t.me/username"
+                   value="<?php echo htmlspecialchars($user['telegram']); ?>">
+        </div>
+    </div>
+
+    <!-- ✅ New Trend Platforms -->
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-discord"></i> Discord</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="discord" class="form-control"
+                   placeholder="https://discord.gg/yourserver"
+                   value="<?php echo htmlspecialchars($user['discord']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-reddit"></i> Reddit</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="reddit" class="form-control"
+                   placeholder="https://reddit.com/u/username"
+                   value="<?php echo htmlspecialchars($user['reddit']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-snapchat"></i> Snapchat</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="snapchat" class="form-control"
+                   placeholder="https://snapchat.com/add/username"
+                   value="<?php echo htmlspecialchars($user['snapchat']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-pinterest"></i> Pinterest</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="pinterest" class="form-control"
+                   placeholder="https://pinterest.com/username"
+                   value="<?php echo htmlspecialchars($user['pinterest']); ?>">
+        </div>
+    </div>
+
+    
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-spotify"></i> Spotify</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="spotify" class="form-control"
+                   placeholder="https://open.spotify.com/user/username"
+                   value="<?php echo htmlspecialchars($user['spotify']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-dribbble"></i> Dribbble</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="dribbble" class="form-control"
+                   placeholder="https://dribbble.com/username"
+                   value="<?php echo htmlspecialchars($user['dribbble']); ?>">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-3 col-md-4 label"><i class="bi bi-behance"></i> Behance</div>
+        <div class="col-lg-9 col-md-8">
+            <input type="text" name="behance" class="form-control"
+                   placeholder="https://behance.net/username"
+                   value="<?php echo htmlspecialchars($user['behance']); ?>">
+        </div>
+    </div>
+
+    <div class="text-center">
+        <input type="submit" name="submit" value="Update Social Media" class="btn btn-primary px-4">
+    </div>
+</form>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -481,8 +772,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <!-- Change Password Form -->
                                 <div class="tab-pane fade" id="profile-change-password">
                                     <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0 text-white">Change Password</h5>
+                                        </div>
                                         <div class="card-body">
-                                            <h5 class="card-title">Change Password</h5>
                                             <form action="change-password.php" method="POST" class="needs-validation" novalidate>
                                                 <div class="row mb-3">
                                                     <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
@@ -525,7 +818,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                                 </div>
 
                                                 <div class="text-center">
-                                                    <input type="submit" class="btn btn-primary" name="submit" value="Change Password">
+                                                    <input type="submit" class="btn btn-primary px-4" name="submit" value="Change Password">
                                                 </div>
                                             </form>
                                         </div>

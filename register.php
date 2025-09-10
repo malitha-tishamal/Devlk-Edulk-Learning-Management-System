@@ -17,11 +17,11 @@ function respond($status, $message, $isAjax = false) {
 // Check if request is AJAX
 $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
 
-// Required fields (added batchyear + birthday)
+// Required fields (added batch_year + birthday)
 $requiredFields = [
     'username', 'regno', 'nic', 'email', 'gender', 'address',
     'nowstatus', 'mobile', 'mobile2', 'password',
-    'batchyear', 'birthday'
+    'batch_year', 'birthday'
 ];
 
 foreach ($requiredFields as $field) {
@@ -40,7 +40,7 @@ $address    = trim($_POST['address']);
 $nowstatus  = $_POST['nowstatus'];
 $mobile     = trim($_POST['mobile']);     // personal
 $mobile2    = trim($_POST['mobile2']);    // home
-$batchyear  = (int) $_POST['batchyear'];
+$batch_year  = (int) $_POST['batch_year'];
 $birthday   = $_POST['birthday']; // YYYY-MM-DD
 $password   = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
@@ -66,15 +66,15 @@ if ($result->num_rows > 0) {
     respond('error', "Registration number or email already exists.", $isAjax);
 }
 
-// Insert user (added batchyear + birthday)
+// Insert user (added batch_year + birthday)
 $stmt = $conn->prepare("INSERT INTO students 
-    (name, regno, nic, email, gender, address, nowstatus, mobile, mobile2, batchyear, birthday, password)
+    (name, regno, nic, email, gender, address, nowstatus, mobile, mobile2, batch_year, birthday, password)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 $stmt->bind_param(
     "ssssssssssss", 
     $name, $regno, $nic, $email, $gender, $address, 
-    $nowstatus, $mobile, $mobile2, $batchyear, $birthday, $password
+    $nowstatus, $mobile, $mobile2, $batch_year, $birthday, $password
 );
 
 if ($stmt->execute()) {

@@ -2,6 +2,21 @@
 session_start();
 require_once '../includes/db-conn.php';
 
+if (!isset($_SESSION['sadmin_id']) && isset($_COOKIE['remember_token'])) {
+    $token = $_COOKIE['remember_token'];
+    $tables = ['students','admins','sadmins','lectures'];
+    foreach ($tables as $table) {
+        $stmt = $conn->prepare("SELECT * FROM $table WHERE remember_token=? LIMIT 1");
+        $stmt->bind_param("s",$token);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($user = $res->fetch_assoc()) {
+            $_SESSION['sadmin_id'] = $user['id'];
+            $_SESSION['user_type'] = rtrim($table,"s"); // just set type
+            break;
+        }
+    }
+}
 // Redirect if not logged in
 if (!isset($_SESSION['user_id']) && !isset($_SESSION['sadmin_id'])) {
     header("Location: ../index.php");
@@ -398,8 +413,29 @@ $gender = isset($user['gender']) ? $user['gender'] : '';
     <?php include_once ("../includes/footer.php") ?>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <?php include_once ("../includes/js-links-inc.php") ?>
-    
+
+
+
     <script>
+document.addEventListener("DOMContentLoaded", () => {
+    // Check if browser supports Notifications
+    if ("Notification" in window) {
+        if (Notification.permission === "default") {
+            // Ask user only first time
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    new Notification("✅ Access Granted!", {
+                        body: "You will now receive site messages.",
+                        icon: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                    });
+                }
+            });
+        }
+    }
+});
+
+
+    
         // Password visibility toggle function
         function togglePasswordVisibility(inputId, iconId) {
             const passwordInput = document.getElementById(inputId);

@@ -127,7 +127,7 @@ session_start();
 
                                         <div class="col-12">
                                           <label for="email" class="form-label">Batch Year</label>
-                                          <input type="number" class="form-control" id="batchyear" name="batchyear" required placeholder="2022">
+                                          <input type="number" class="form-control" id="batchyear" name="batch_year" required placeholder="2022">
                                             <div class="invalid-feedback" style="font-size:14px" id="">
                                                 Please enter the email address
                                             </div>

@@ -32,35 +32,22 @@ if ($search !== '') {
 if ($study_year !== '') {
     $sql .= " AND batch_year = '$study_year'";
 }
-
 if ($status !== '') {
     $sql .= " AND status = '$status'";
 }
 
 $result = $conn->query($sql);
 
-// Get all distinct study years from regno
+// Get all distinct study years
 $yearQuery = "SELECT DISTINCT batch_year AS year FROM students ORDER BY year DESC";
 $yearResult = $conn->query($yearQuery);
 
 // Get live statistics
-$totalStudentsQuery = "SELECT COUNT(*) as count FROM students";
-$activeStudentsQuery = "SELECT COUNT(*) as count FROM students WHERE status = 'active' OR status = 'approved'";
-$pendingStudentsQuery = "SELECT COUNT(*) as count FROM students WHERE status = 'pending'";
-$disabledStudentsQuery = "SELECT COUNT(*) as count FROM students WHERE status = 'disabled' OR status = 'rejected'";
-
-$totalStudentsResult = $conn->query($totalStudentsQuery);
-$activeStudentsResult = $conn->query($activeStudentsQuery);
-$pendingStudentsResult = $conn->query($pendingStudentsQuery);
-$disabledStudentsResult = $conn->query($disabledStudentsQuery);
-
-$totalStudents = $totalStudentsResult->fetch_assoc()['count'];
-$activeStudents = $activeStudentsResult->fetch_assoc()['count'];
-$pendingStudents = $pendingStudentsResult->fetch_assoc()['count'];
-$disabledStudents = $disabledStudentsResult->fetch_assoc()['count'];
-
+$totalStudents = $conn->query("SELECT COUNT(*) as count FROM students")->fetch_assoc()['count'];
+$activeStudents = $conn->query("SELECT COUNT(*) as count FROM students WHERE status = 'active' OR status = 'approved'")->fetch_assoc()['count'];
+$pendingStudents = $conn->query("SELECT COUNT(*) as count FROM students WHERE status = 'pending'")->fetch_assoc()['count'];
+$disabledStudents = $conn->query("SELECT COUNT(*) as count FROM students WHERE status = 'disabled' OR status = 'rejected'")->fetch_assoc()['count'];
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,224 +67,19 @@ $disabledStudents = $disabledStudentsResult->fetch_assoc()['count'];
       --dark: #212529;
       --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
-    
-    .card {
-      border-radius: 12px;
-      box-shadow: var(--card-shadow);
-      border: none;
-      margin-bottom: 1.5rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    }
-    
-    .card-body {
-      padding: 1.5rem;
-    }
-    
-    .btn {
-      border-radius: 8px;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
-      transition: all 0.2s ease;
-    }
-    
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .btn-sm {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.875rem;
-    }
-    
-    .table th {
-      border-top: none;
-      font-weight: 600;
-      color: #495057;
-      background-color: #f8f9fa;
-      padding: 1rem 0.5rem;
-    }
-    
-    .table td {
-      padding: 1rem 0.5rem;
-      vertical-align: middle;
-    }
-    
-    .student-avatar {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    .status-badge {
-      border-radius: 50px;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    
-    .filter-section {
-      background: linear-gradient(120deg, #f8f9fa 0%, #e9ecef 100%);
-      border-radius: 10px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-    
-    .action-buttons .btn {
-      margin: 0 3px;
-      width: 36px;
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .page-title {
-      color: #343a40;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      font-size: 1.8rem;
-    }
-    
-    .breadcrumb-item a {
-      color: var(--primary);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .breadcrumb-item a:hover {
-      color: var(--secondary);
-    }
-    
-    .table-responsive {
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-    
-    .table-hover tbody tr {
-      transition: background-color 0.2s;
-    }
-    
-    .table-hover tbody tr:hover {
-      background-color: rgba(67, 97, 238, 0.05);
-    }
-    
-    .pagination .page-link {
-      border-radius: 6px;
-      margin: 0 3px;
-      color: var(--primary);
-      border: none;
-      padding: 0.5rem 0.9rem;
-    }
-    
-    .pagination .page-item.active .page-link {
-      background-color: var(--primary);
-      border-color: var(--primary);
-      box-shadow: 0 2px 5px rgba(67, 97, 238, 0.3);
-    }
-    
-    .stats-card {
-      text-align: center;
-      padding: 1.5rem;
-      border-radius: 10px;
-      background: white;
-      box-shadow: var(--card-shadow);
-      transition: transform 0.3s;
-    }
-    
-    .stats-card:hover {
-      transform: translateY(-5px);
-    }
-    
-    .stats-card i {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      color: var(--primary);
-    }
-    
-    .stats-card h3 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-      color: var(--dark);
-    }
-    
-    .stats-card p {
-      color: #6c757d;
-      margin-bottom: 0;
-    }
-    
-    /* Modern form elements */
-    .form-control, .form-select {
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      border: 1px solid #ced4da;
-      transition: all 0.3s;
-    }
-    
-    .form-control:focus, .form-select:focus {
-      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
-      border-color: var(--primary);
-    }
-    
-    /* Custom badge colors */
-    .bg-success {
-      background: linear-gradient(45deg, #2ecc71, #27ae60) !important;
-    }
-    
-    .bg-warning {
-      background: linear-gradient(45deg, #f39c12, #e67e22) !important;
-    }
-    
-    .bg-danger {
-      background: linear-gradient(45deg, #e74c3c, #c0392b) !important;
-    }
-    
-    .bg-secondary {
-      background: linear-gradient(45deg, #95a5a6, #7f8c8d) !important;
-    }
-    
-    /* Animation for buttons */
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    
-    .btn-primary {
-      background: linear-gradient(45deg, var(--primary), var(--secondary));
-      border: none;
-      animation: pulse 2s infinite;
-    }
-    
-    .btn-primary:hover {
-      background: linear-gradient(45deg, var(--secondary), var(--primary));
-      transform: translateY(-2px);
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .card-body {
-        padding: 1rem;
-      }
-      
-      .action-buttons .btn {
-        margin-bottom: 5px;
-      }
-      
-      .table-responsive {
-        overflow-x: auto;
-      }
-    }
+    .card { border-radius: 12px; box-shadow: var(--card-shadow); border: none; margin-bottom: 1.5rem; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+    .student-avatar { width: 200px; height: 200px; border-radius: 10%; object-fit: cover; }
+    .status-badge { border-radius: 50px; padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: 600; }
+    .stats-card { text-align:center; padding:1.5rem; border-radius:10px; background:white; box-shadow:var(--card-shadow); }
+    .stats-card:hover { transform:translateY(-5px); }
+    .stats-card i { font-size:2rem; margin-bottom:1rem; color:var(--primary); }
+    .stats-card h3 { font-size:1.8rem; margin-bottom:0.5rem; color:var(--dark); }
+    .stats-card p { color:#6c757d; margin-bottom:0; }
+    .action-btn { padding: 0.3rem 0.6rem; font-size: 0.875rem; }
+    .student-row { cursor: pointer; transition: background-color 0.2s; }
+    .student-row:hover { background-color: rgba(67, 97, 238, 0.05); }
+    .detail-label { font-weight: 600; color: #495057; }
   </style>
 </head>
 <body>
@@ -310,7 +92,7 @@ $disabledStudents = $disabledStudentsResult->fetch_assoc()['count'];
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-          <li classbreadcrumb-item active">Students</li>
+          <li class="breadcrumb-item active">Students</li>
         </ol>
       </nav>
     </div>
@@ -319,342 +101,240 @@ $disabledStudents = $disabledStudentsResult->fetch_assoc()['count'];
       <div class="row">
         <!-- Statistics Cards -->
         <div class="col-lg-3 col-md-6">
-          <div class="stats-card">
-            <i class="bi bi-people"></i>
-            <h3><?php echo $totalStudents; ?></h3>
-            <p>Total Students</p>
-          </div>
+          <div class="stats-card"><i class="bi bi-people"></i><h3><?= $totalStudents ?></h3><p>Total Students</p></div>
         </div>
         <div class="col-lg-3 col-md-6">
-          <div class="stats-card">
-            <i class="bi bi-check-circle"></i>
-            <h3><?php echo $activeStudents; ?></h3>
-            <p>Active Students</p>
-          </div>
+          <div class="stats-card"><i class="bi bi-check-circle"></i><h3><?= $activeStudents ?></h3><p>Active Students</p></div>
         </div>
         <div class="col-lg-3 col-md-6">
-          <div class="stats-card">
-            <i class="bi bi-clock-history"></i>
-            <h3><?php echo $pendingStudents; ?></h3>
-            <p>Pending Approval</p>
-          </div>
+          <div class="stats-card"><i class="bi bi-clock-history"></i><h3><?= $pendingStudents ?></h3><p>Pending Approval</p></div>
         </div>
         <div class="col-lg-3 col-md-6">
-          <div class="stats-card">
-            <i class="bi bi-x-circle"></i>
-            <h3><?php echo $disabledStudents; ?></h3>
-            <p>Disabled Accounts</p>
-          </div>
+          <div class="stats-card"><i class="bi bi-x-circle"></i><h3><?= $disabledStudents ?></h3><p>Disabled Accounts</p></div>
         </div>
       </div>
 
-      <div class="row mt-4">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="card-title mb-0">Student Records</h5>
-                <a href="pages-add-student.php" class="btn btn-primary">
-                  <i class="bi bi-plus-circle me-1"></i> Add New Student
-                </a>
-              </div>
+      <!-- Students Table -->
+      <div class="card mt-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="card-title mb-0">Student Records</h5>
+            <a href="pages-add-student.php" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> Add New Student</a>
+          </div>
 
-              <!-- Filters -->
-              <div class="filter-section">
-                <form method="GET" action="">
-                  <div class="row">
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label small text-muted">Search</label>
-                      <input type="text" name="search" class="form-control" placeholder="Name or Registration ID" value="<?= htmlspecialchars($search); ?>">
-                    </div>
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label small text-muted">Batch Year</label>
-                      <select name="study_year" class="form-select">
-                        <option value="">All Years</option>
-                        <?php
-                        if ($yearResult->num_rows > 0) {
-                          while ($y = $yearResult->fetch_assoc()) {
-                            $yearVal = $y['year'];
-                            $selected = ($study_year == $yearVal) ? : '';
-                            echo "<option value='$yearVal' $selected>$yearVal</option>";
-                          }
-                        }
-                        ?>
-                      </select>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label small text-muted">Status</label>
-                      <select name="status" class="form-select">
-                        <option value="">All Status</option>
-                        <option value="active" <?= ($status == 'active') ? 'selected' : '' ?>>Active</option>
-                        <option value="pending" <?= ($status == 'pending') ? 'selected' : '' ?>>Pending</option>
-                        <option value="disabled" <?= ($status == 'disabled') ? 'selected' : '' ?>>Disabled</option>
-                      </select>
-                    </div>
-                    <div class="col-md-3 mb-2 d-flex align-items-end">
-                      <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-filter me-1"></i> Apply Filters
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-              <!-- Table -->
-              <div class="table-responsive">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Student</th>
-                      <th scope="col">Reg ID</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Batch Year</th>
-                      <th scope="col">Status</th>
-                      <th scope="col" class="text-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-                    if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
-                        $status = strtolower($row['status']);
-                        echo "<tr>";
-                        echo "<td>{$row['id']}</td>";
-                        echo "<td>
-                                <div class='d-flex align-items-center'>
-                                  <img src='../{$row['profile_picture']}' class='student-avatar me-3'>
-                                  <div>
-                                    <div class='fw-semibold'>{$row['name']}</div>
-                                    <small class='text-muted'>{$row['nic']}</small>
-                                  </div>
-                                </div>
-                              </td>";
-                        echo "<td>{$row['regno']}</td>";
-                        echo "<td>{$row['email']}</td>";
-                        echo "<td>{$row['batch_year']}</td>";
-                        
-                        // Status Badge
-                        echo "<td>";
-                        switch ($status) {
-                            case 'active':
-                            case 'approved':
-                                echo "<span class='badge bg-success status-badge'>Active</span>";
-                                break;
-                            case 'disabled':
-                            case 'rejected':
-                                echo "<span class='badge bg-danger status-badge'>Disabled</span>";
-                                break;
-                            case 'pending':
-                                echo "<span class='badge bg-warning status-badge'>Pending</span>";
-                                break;
-                            default:
-                                echo "<span class='badge bg-secondary status-badge'>" . ucfirst($row['status']) . "</span>";
-                        }
-                        echo "</td>";
-                        
-                        // Action buttons
-                        echo "<td class='text-center action-buttons'>";
-                        
-                        // View button
-                        echo "<button class='btn btn-sm btn-info view-btn' data-id='{$row['id']}' data-name='{$row['name']}' data-email='{$row['email']}' data-nic='{$row['nic']}' data-batch='{$row['batch_year']}' data-mobile='{$row['mobile']}' data-address='{$row['address']}' data-profile='../{$row['profile_picture']}' data-bs-toggle='tooltip' title='View Details'>
-                                <i class='bi bi-eye'></i>
-                              </button>";
-                        
-                        // Edit button
-                        echo "<a href='edit-student.php?id={$row['id']}' class='btn btn-sm btn-primary' data-bs-toggle='tooltip' title='Edit'>
-                                <i class='bi bi-pencil'></i>
-                              </a>";
-                        
-                        // Approve button
-                        $approve_disabled = ($status === 'active' || $status === 'approved') ? "disabled" : "";
-                        echo "<button class='btn btn-sm btn-success approve-btn' data-id='{$row['id']}' $approve_disabled data-bs-toggle='tooltip' title='Approve'>
-                                <i class='bi bi-check-circle'></i>
-                              </button>";
-                        
-                        // Disable button
-                        $disable_disabled = ($status === 'disabled' || $status === 'rejected') ? "disabled" : "";
-                        echo "<button class='btn btn-sm btn-warning disable-btn' data-id='{$row['id']}' $disable_disabled data-bs-toggle='tooltip' title='Disable'>
-                                <i class='bi bi-slash-circle'></i>
-                              </button>";
-                        
-                        // Delete button
-                        echo "<button class='btn btn-sm btn-danger delete-btn' data-id='{$row['id']}' data-bs-toggle='tooltip' title='Delete'>
-                                <i class='bi bi-trash'></i>
-                              </button>";
-                        
-                        echo "</td>";
-                        echo "</tr>";
-                      }
-                    } else {
-                      echo "<tr><td colspan='7' class='text-center py-4 text-muted'>No students found matching your criteria.</td></tr>";
-                    }
-                    ?>
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Pagination -->
-              <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center mt-4">
-                  <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                  </li>
-                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                  </li>
-                </ul>
-              </nav>
-
+          <!-- Filters -->
+          <form method="GET" action="" class="row g-3 mb-4">
+            <div class="col-md-3">
+              <input type="text" name="search" class="form-control" placeholder="Name or Reg ID" value="<?= htmlspecialchars($search) ?>">
             </div>
+            <div class="col-md-3">
+              <select name="study_year" class="form-select">
+                <option value="">All Years</option>
+                <?php while ($y = $yearResult->fetch_assoc()): ?>
+                  <option value="<?= $y['year'] ?>" <?= $study_year == $y['year'] ? : '' ?>><?= $y['year'] ?></option>
+                <?php endwhile; ?>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <select name="status" class="form-select">
+                <option value="">All Status</option>
+                <option value="active" <?= $status=='active'?'selected':'' ?>>Active</option>
+                <option value="pending" <?= $status=='pending'?'selected':'' ?>>Pending</option>
+                <option value="disabled" <?= $status=='disabled'?'selected':'' ?>>Disabled</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-primary"><i class="bi bi-filter"></i> Apply Filters</button>
+            </div>
+          </form>
+
+          <!-- Table -->
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Student</th>
+                  <th>Reg ID</th>
+                  <th>Email</th>
+                  <th>Batch</th>
+                  <th>Status</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if ($result->num_rows > 0): ?>
+                  <?php while ($row = $result->fetch_assoc()): ?>
+                    <tr class="student-row" data-bs-toggle="modal" data-bs-target="#studentModal" data-student='<?= json_encode($row) ?>'>
+                      <td><?= $row['id'] ?></td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <img src="../<?= $row['profile_picture'] ?>" class="student-avatar me-2">
+                          <div><div class="fw-semibold"><?= $row['name'] ?></div><small><?= $row['nic'] ?></small></div>
+                        </div>
+                      </td>
+                      <td><?= $row['regno'] ?></td>
+                      <td><?= $row['email'] ?></td>
+                      <td><?= $row['batch_year'] ?></td>
+                      <td>
+                        <?php if (in_array($row['status'], ['active','approved'])): ?>
+                          <span class="badge bg-success">Active</span>
+                        <?php elseif (in_array($row['status'], ['disabled','rejected'])): ?>
+                          <span class="badge bg-danger">Disabled</span>
+                        <?php elseif ($row['status']=='pending'): ?>
+                          <span class="badge bg-warning">Pending</span>
+                        <?php else: ?>
+                          <span class="badge bg-secondary"><?= ucfirst($row['status']) ?></span>
+                        <?php endif; ?>
+                      </td>
+                      <td class="text-center">
+                        <div class="btn-group" role="group">
+                          <button type="button" class="btn btn-sm btn-info action-btn view-details" data-bs-toggle="modal" data-bs-target="#studentModal" data-student='<?= json_encode($row) ?>'>
+                            <i class="bi bi-eye"></i>
+                          </button>
+                          <a href="edit-student.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-primary action-btn">
+                            <i class="bi bi-pencil"></i>
+                          </a>
+                          <a href="process-students.php?approve_id=<?= $row['id'] ?>" class="btn btn-sm btn-success action-btn">
+                            <i class="bi bi-check-circle"></i>
+                          </a>
+                          <a href="process-students.php?disable_id=<?= $row['id'] ?>" class="btn btn-sm btn-warning action-btn">
+                            <i class="bi bi-slash-circle"></i>
+                          </a>
+                          <a href="process-students.php?delete_id=<?= $row['id'] ?>" class="btn btn-sm btn-danger action-btn">
+                            <i class="bi bi-trash"></i>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  <?php endwhile; ?>
+                <?php else: ?>
+                  <tr><td colspan="7" class="text-center text-muted">No students found.</td></tr>
+                <?php endif; ?>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- View Student Modal -->
-  <div class="modal fade" id="viewStudentModal" tabindex="-1" aria-hidden="true">
+  <!-- Student Details Modal -->
+  <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Student Details</h5>
+          <h5 class="modal-title" id="studentModalLabel">Student Details</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="studentDetails">
-          <!-- Details will be loaded via JavaScript -->
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-4 text-center">
+              <img id="modal-profile-picture" src="" class="student-avatar mb-3" alt="Profile Picture">
+              <h4 id="modal-name" class="mb-1"></h4>
+              <p id="modal-regno" class="text-muted"></p>
+              <div id="modal-status" class="mb-3"></div>
+            </div>
+            <div class="col-md-8">
+              <div class="row mb-3">
+                <div class="col-sm-4 detail-label">NIC:</div>
+                <div class="col-sm-8" id="modal-nic"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-4 detail-label">Email:</div>
+                <div class="col-sm-8" id="modal-email"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-4 detail-label">Gender:</div>
+                <div class="col-sm-8" id="modal-gender"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-4 detail-label">Birthday:</div>
+                <div class="col-sm-8" id="modal-birthday"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-4 detail-label">Batch Year:</div>
+                <div class="col-sm-8" id="modal-batch"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-4 detail-label">Address:</div>
+                <div class="col-sm-8" id="modal-address"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-4 detail-label">Current Status:</div>
+                <div class="col-sm-8" id="modal-nowstatus"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-4 detail-label">Primary Mobile:</div>
+                <div class="col-sm-8" id="modal-mobile"></div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4 detail-label">Secondary Mobile:</div>
+                <div class="col-sm-8" id="modal-mobile2"></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="#" id="modal-edit-btn" class="btn btn-primary">Edit Student</a>
         </div>
       </div>
     </div>
   </div>
 
   <?php include_once("../includes/footer.php"); ?>
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
   <?php include_once("../includes/js-links-inc.php"); ?>
-
+  
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // Initialize tooltips
-      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-      });
+    document.addEventListener('DOMContentLoaded', function() {
+      const studentModal = document.getElementById('studentModal');
       
-      // Approve student
-      document.querySelectorAll('.approve-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          if (confirm("Are you sure you want to approve this student?")) {
-            window.location.href = `process-students.php?approve_id=${id}`;
-          }
-        });
-      });
-      
-      // Disable student
-      document.querySelectorAll('.disable-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          if (confirm("Are you sure you want to disable this student?")) {
-            window.location.href = `process-students.php?disable_id=${id}`;
-          }
-        });
-      });
-      
-      // Delete student
-      document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          if (confirm("Are you sure you want to delete this student? This action cannot be undone.")) {
-            window.location.href = `process-students.php?delete_id=${id}`;
-          }
-        });
-      });
-      
-      // View student details
-      document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const name = btn.getAttribute('data-name');
-          const email = btn.getAttribute('data-email');
-          const nic = btn.getAttribute('data-nic');
-          const batch = btn.getAttribute('data-batch');
-          const mobile = btn.getAttribute('data-mobile');
-          const address = btn.getAttribute('data-address');
-          const profile = btn.getAttribute('data-profile');
-          
-          document.getElementById('studentDetails').innerHTML = `
-            <div class="row">
-              <div class="col-md-4 text-center">
-                <img src="${profile}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                <h4>${name}</h4>
-                <p class="text-muted">Registration ID: ${id}</p>
-              </div>
-              <div class="col-md-8">
-                <div class="row mb-3">
-                  <div class="col-sm-4">
-                    <p class="mb-0 fw-semibold">Email</p>
-                  </div>
-                  <div class="col-sm-8">
-                    <p class="text-muted mb-0">${email}</p>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-4">
-                    <p class="mb-0 fw-semibold">NIC</p>
-                  </div>
-                  <div class="col-sm-8">
-                    <p class="text-muted mb-0">${nic}</p>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-4">
-                    <p class="mb-0 fw-semibold">Batch Year</p>
-                  </div>
-                  <div class="col-sm-8">
-                    <p class="text-muted mb-0">${batch}</p>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-4">
-                    <p class="mb-0 fw-semibold">Mobile</p>
-                  </div>
-                  <div class="col-sm-8">
-                    <p class="text-muted mb-0">${mobile}</p>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-4">
-                    <p class="mb-0 fw-semibold">Address</p>
-                  </div>
-                  <div class="col-sm-8">
-                    <p class="text-muted mb-0">${address}</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <p class="mb-0 fw-semibold">Status</p>
-                  </div>
-                  <div class="col-sm-8">
-                    <span class="badge bg-success status-badge">Active</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
-          
-          const myModal = new bootstrap.Modal(document.getElementById('viewStudentModal'));
-          myModal.show();
-        });
+      studentModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const studentData = JSON.parse(button.getAttribute('data-student'));
+        
+        // Populate modal with student data
+        document.getElementById('modal-profile-picture').src = '../' + studentData.profile_picture;
+        document.getElementById('modal-name').textContent = studentData.name;
+        document.getElementById('modal-regno').textContent = studentData.regno;
+        document.getElementById('modal-nic').textContent = studentData.nic;
+        document.getElementById('modal-email').textContent = studentData.email;
+        document.getElementById('modal-gender').textContent = studentData.gender;
+        document.getElementById('modal-birthday').textContent = studentData.birthday;
+        document.getElementById('modal-batch').textContent = studentData.batch_year;
+        document.getElementById('modal-address').textContent = studentData.address;
+        document.getElementById('modal-nowstatus').textContent = studentData.nowstatus;
+        document.getElementById('modal-mobile').textContent = studentData.mobile;
+        document.getElementById('modal-mobile2').textContent = studentData.mobile2;
+        document.getElementById('modal-edit-btn').href = 'edit-student.php?id=' + studentData.id;
+        
+        // Set status badge
+        const statusElement = document.getElementById('modal-status');
+        statusElement.innerHTML = '';
+        
+        let statusClass, statusText;
+        if (['active', 'approved'].includes(studentData.status)) {
+          statusClass = 'bg-success';
+          statusText = 'Active';
+        } else if (['disabled', 'rejected'].includes(studentData.status)) {
+          statusClass = 'bg-danger';
+          statusText = 'Disabled';
+        } else if (studentData.status === 'pending') {
+          statusClass = 'bg-warning';
+          statusText = 'Pending';
+        } else {
+          statusClass = 'bg-secondary';
+          statusText = studentData.status.charAt(0).toUpperCase() + studentData.status.slice(1);
+        }
+        
+        const badge = document.createElement('span');
+        badge.className = `badge ${statusClass} status-badge`;
+        badge.textContent = statusText;
+        statusElement.appendChild(badge);
       });
     });
   </script>
 </body>
 </html>
-
 <?php $conn->close(); ?>

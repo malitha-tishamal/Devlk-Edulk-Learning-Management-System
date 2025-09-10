@@ -90,11 +90,13 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
       background: var(--blue-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      font-size: 1.8rem;
     }
     
     .breadcrumb {
       background: transparent;
       padding: 0;
+      font-size: 0.9rem;
     }
     
     .breadcrumb-item a {
@@ -113,12 +115,14 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
     }
     
     .card {
-      border-radius: 20px;
+      border-radius: 16px;
       border: none;
       box-shadow: var(--card-shadow);
       overflow: hidden;
       background: #fff;
       transition: var(--transition);
+      width: 100%;
+      max-width: 100%;
     }
     
     .card:hover {
@@ -136,16 +140,18 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
       font-weight: 700;
       color: white;
       margin-bottom: 0;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
     }
     
     .card-body {
-      padding: 2rem;
-      width: 700px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
     }
     
     .birthday-section {
-      margin-bottom: 3rem;
+      margin-bottom: 2.5rem;
       position: relative;
     }
     
@@ -157,21 +163,21 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
       content: '';
       position: absolute;
       top: 30px;
-      left: -15px;
+      left: -10px;
       height: calc(100% - 60px);
-      width: 4px;
+      width: 3px;
       background: var(--blue-gradient);
       border-radius: 10px;
     }
     
     .section-title {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: var(--dark);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.6rem;
       padding: 0.5rem 0;
       border-bottom: 2px solid #e6f0ff;
     }
@@ -180,42 +186,47 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
       background: var(--blue-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
     }
     
     .students-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-      gap: 2rem;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
     }
     
     .student-card {
       background: white;
-      border-radius: 20px;
+      border-radius: 16px;
       overflow: hidden;
       transition: var(--transition);
       box-shadow: var(--card-shadow);
       cursor: pointer;
       position: relative;
       border: none;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 400px;
     }
     
     .student-card:hover {
-      transform: translateY(-8px);
+      transform: translateY(-5px);
       box-shadow: var(--card-shadow-hover);
     }
     
     .card-decoration {
-      height: 10px;
+      height: 8px;
       background: var(--blue-gradient);
       width: 100%;
     }
     
     .card-content {
-      padding: 2rem;
+      padding: 1.5rem;
       display: flex;
-      gap: 1.5rem;
+      flex-direction: column;
+      gap: 1.2rem;
       align-items: center;
+      text-align: center;
     }
     
     .student-image-container {
@@ -224,8 +235,8 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
     }
     
     .student-image {
-      width: 200px;
-      height: 200px;
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
       object-fit: cover;
       border: 4px solid #fff;
@@ -252,11 +263,11 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
     }
     
     .student-info {
-      flex: 1;
+      width: 100%;
     }
     
     .student-name {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: var(--dark);
       margin-bottom: 0.75rem;
@@ -268,7 +279,8 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
       content: '';
       position: absolute;
       bottom: -5px;
-      left: 0;
+      left: 50%;
+      transform: translateX(-50%);
       width: 40px;
       height: 3px;
       background: var(--blue-gradient);
@@ -282,58 +294,59 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
     .student-detail {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.5rem;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--gray);
       margin-bottom: 0.4rem;
     }
     
     .student-detail i {
-      width: 18px;
+      width: 16px;
       color: var(--primary);
       transition: var(--transition);
     }
     
     .student-card:hover .student-detail i {
-      transform: scale(1.2);
+      transform: scale(1.1);
       color: var(--secondary);
     }
     
     .birthday-message {
       background: linear-gradient(135deg, #e6f0ff 0%, #d9e7ff 100%);
-      border-radius: 15px;
-      padding: 1.2rem;
-      margin-top: 1.2rem;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
       border-left: 4px solid var(--primary);
       transition: var(--transition);
     }
     
     .student-card:hover .birthday-message {
       background: linear-gradient(135deg, #d9e7ff 0%, #cadaff 100%);
-      transform: translateX(5px);
+      transform: translateX(3px);
     }
     
     .birthday-text {
       color: var(--primary);
       font-weight: 600;
-      font-size: 1rem;
-      line-height: 1.5;
+      font-size: 0.9rem;
+      line-height: 1.4;
       margin: 0;
     }
     
     .birthday-icon {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
+      top: 15px;
+      right: 15px;
+      width: 40px;
+      height: 40px;
       background: var(--blue-gradient);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
       transition: var(--transition);
     }
@@ -345,30 +358,32 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
     
     .no-birthdays {
       text-align: center;
-      padding: 3.5rem;
+      padding: 2.5rem 1.5rem;
       background: white;
-      border-radius: 20px;
+      border-radius: 16px;
       box-shadow: var(--card-shadow);
       grid-column: 1 / -1;
       transition: var(--transition);
+      max-width: 400px;
+      margin: 0 auto;
     }
     
     .no-birthdays:hover {
-      transform: translateY(-5px);
+      transform: translateY(-3px);
       box-shadow: var(--card-shadow-hover);
     }
     
     .no-birthdays i {
-      font-size: 4rem;
+      font-size: 3rem;
       background: var(--blue-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     
     .no-birthdays p {
       color: var(--gray);
-      font-size: 1.2rem;
+      font-size: 1rem;
       margin-bottom: 0;
       font-weight: 600;
     }
@@ -379,22 +394,22 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
       justify-content: center;
       background: var(--blue-gradient);
       color: white;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 700;
       border-radius: 50px;
-      padding: 0.35rem 1rem;
-      margin-left: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      margin-left: 0.5rem;
       box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
     }
     
     .download-indicator {
       position: absolute;
-      bottom: 15px;
-      right: 15px;
+      bottom: 10px;
+      right: 10px;
       background: rgba(255, 255, 255, 0.9);
-      padding: 0.4rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 16px;
+      font-size: 0.7rem;
       color: var(--primary);
       font-weight: 600;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -402,50 +417,40 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
       transition: var(--transition);
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.3rem;
     }
     
     .student-card:hover .download-indicator {
       opacity: 1;
-      transform: translateY(-5px);
+      transform: translateY(-3px);
     }
     
-    @media (max-width: 992px) {
-      .students-grid {
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 1.5rem;
-      }
+    .logos-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 1rem;
     }
     
-    @media (max-width: 768px) {
-      .students-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .card-content {
-        flex-direction: column;
-        text-align: center;
-        padding: 1.5rem;
-      }
-      
-      .student-detail {
-        justify-content: center;
-      }
-      
-      .student-name::after {
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      
-      .birthday-section::before {
-        display: none;
-      }
+    .logo {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+    }
+    
+    .logo.edulk {
+      height: 70px;
+    }
+    
+    .logo.hnd {
+      height: 80px;
     }
     
     /* Animation for birthday cards */
     @keyframes float {
       0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-5px); }
       100% { transform: translateY(0px); }
     }
     
@@ -459,6 +464,86 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
     
     .student-card:nth-child(3n) {
       animation-delay: 1s;
+    }
+    
+    /* Media Queries for Larger Screens */
+    @media (min-width: 576px) {
+      .pagetitle h1 {
+        font-size: 2rem;
+      }
+      
+      .card-title {
+        font-size: 1.5rem;
+      }
+      
+      .student-card {
+        max-width: 500px;
+      }
+      
+      .student-image {
+        width: 160px;
+        height: 160px;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .main {
+        padding: 20px;
+      }
+      
+      .card-body {
+        padding: 2rem;
+      }
+      
+      .students-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .student-card {
+        max-width: 100%;
+      }
+      
+      .card-content {
+        flex-direction: row;
+        text-align: left;
+        padding: 2rem;
+      }
+      
+      .student-name::after {
+        left: 0;
+        transform: none;
+      }
+      
+      .student-detail {
+        justify-content: flex-start;
+      }
+    }
+    
+    @media (min-width: 992px) {
+      .students-grid {
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      }
+      
+      .student-image {
+        width: 180px;
+        height: 180px;
+      }
+    }
+    
+    @media (min-width: 1200px) {
+      .students-grid {
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+      }
+      
+      .student-image {
+        width: 200px;
+        height: 200px;
+      }
     }
   </style>
 </head>
@@ -496,18 +581,22 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
             <?php if ($today_count > 0): ?>
               <div class="students-grid">
                 <?php foreach ($todays_birthdays as $student): ?>
-                  <div class="student-card" onclick="downloadCard(this)")>
+                  <div class="student-card" onclick="downloadCard(this)">
                     <div class="card-decoration"></div>
                     <div class="birthday-icon">
                       <i class="fas fa-gift"></i>
                     </div>
-                     <img src="../assets\images\logos/edulk-logo.png" width="100px">
-                     <img src="../assets\images\logos/hnd-logo.png" width="200px">
+                    <div class="logos-container">
+                        <img src="../assets/images/logos/edulk-logo.png" class="logo edulk" alt="Edulk Logo">
+                        <img src="../assets/images/logos/hnd-logo.png" class="logo hnd" alt="HND Logo">
+                      </div>
                     <div class="card-content">
+                      
+                      
                       <div class="student-image-container">
                         <img src="../<?= htmlspecialchars($student['profile_picture']) ?>" alt="Profile" class="student-image">
-
                       </div>
+                      
                       <div class="student-info">
                         <h3 class="student-name"><?= htmlspecialchars($student['name']) ?></h3>
                         
@@ -541,7 +630,6 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
                           </p>
                         </div>
                       </div>
-
                     </div>
                     <div class="download-indicator">
                       <i class="fas fa-download me-1"></i> Click to download
@@ -572,12 +660,16 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
                     <div class="birthday-icon">
                       <i class="fas fa-clock"></i>
                     </div>
-                    <img src="../assets\images\logos/edulk-logo.png" width="100px">
-                     <img src="../assets\images\logos/hnd-logo.png" width="200px">
                     <div class="card-content">
+                      <div class="logos-container">
+                        <img src="../assets/images/logos/edulk-logo.png" class="logo edulk" alt="Edulk Logo">
+                        <img src="../assets/images/logos/hnd-logo.png" class="logo hnd" alt="HND Logo">
+                      </div>
+                      
                       <div class="student-image-container">
                         <img src="../<?= htmlspecialchars($student['profile_picture']) ?>" alt="Profile" class="student-image">
                       </div>
+                      
                       <div class="student-info">
                         <h3 class="student-name"><?= htmlspecialchars($student['name']) ?></h3>
                         
@@ -635,42 +727,6 @@ $upcoming_birthdays = $result_upcoming->fetch_all(MYSQLI_ASSOC);
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
   <?php include_once("../includes/js-links-inc.php") ?>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-  <script>
-function sendBirthdayNotifications() {
-    if ("Notification" in window && Notification.permission === "granted") {
-        fetch("birthday-message.php")
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(msg => {
-                    new Notification(msg.title, {
-                        body: msg.body,
-                        icon: msg.icon
-                    });
-                });
-            })
-            .catch(err => console.error(err));
-    }
-}
-
-// Permission request karanna
-if ("Notification" in window) {
-  if (Notification.permission === "default") {
-    Notification.requestPermission().then(permission => {
-      if (permission === "granted") {
-        sendBirthdayNotifications();
-      }
-    });
-  } else if (Notification.permission === "granted") {
-    sendBirthdayNotifications();
-  }
-}
-</script>
-
-
-
   <script>
     function downloadCard(cardElement) {
       // Create a clone of the card to avoid affecting the original
@@ -689,7 +745,7 @@ if ("Notification" in window) {
       // Remove the birthday icon from the clone
       const birthdayIcon = clone.querySelector('.birthday-icon');
       if (birthdayIcon) {
-        
+        birthdayIcon.remove();
       }
       
       // Temporarily append to body for rendering
