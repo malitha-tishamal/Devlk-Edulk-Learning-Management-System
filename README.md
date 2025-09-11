@@ -1,5 +1,5 @@
 # mediq
-Project MediQ
+Project Edulk
 
 # Cloning this Repo
 \* Use GitHub Desktop to Clone and Working with this Repo.<br/>
@@ -13,7 +13,7 @@ Clone this to:</br>
 
 # Dtabase Setup
 *You need to make a database name like <strong>mediq_db</strong> for open this project in your localhost.*<br />
-Localhost Database Name = <strong>mediq_db</strong><br /><br />
+Localhost Database Name = <strong>edulk_db</strong><br /><br />
    
 # Attention to these things
 <strong>* Before start the works, you have to pull the project.</strong><br />
