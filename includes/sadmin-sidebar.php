@@ -266,8 +266,6 @@
         </li>
 
     </ul>
-
-
     <script>
 function sendBirthdayNotifications() {
     if ("Notification" in window && Notification.permission === "granted") {
@@ -285,6 +283,13 @@ function sendBirthdayNotifications() {
     }
 }
 
+// 1 minute = 60000 milliseconds
+setInterval(sendBirthdayNotifications, 30000);
+
+// first run immediately
+sendBirthdayNotifications();
+
+
 // Request permission & send notifications
 if ("Notification" in window) {
     if (Notification.permission === "default") {
@@ -298,6 +303,5 @@ if ("Notification" in window) {
     }
 }
 </script>
-
 
 </aside><!-- End Sidebar -->

@@ -56,6 +56,26 @@ $disabledStudents = $conn->query("SELECT COUNT(*) as count FROM students WHERE s
   <title>Manage Students - EduWide</title>
   <?php include_once("../includes/css-links-inc.php"); ?>
   <style>
+        /* Styling for the popup */
+        .popup-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            display: none; /* Hidden by default */
+            z-index: 9999;
+        }
+
+        .error-popup {
+            background-color: #dc3545;
+        }
+    </style>
+  <style>
     :root {
       --primary: #4361ee;
       --secondary: #3f37c9;
@@ -85,6 +105,40 @@ $disabledStudents = $conn->query("SELECT COUNT(*) as count FROM students WHERE s
 <body>
   <?php include_once("../includes/header.php") ?>
   <?php include_once("../includes/sadmin-sidebar.php") ?>
+
+   <!-- Displaying the message from the session -->
+    <?php if (isset($_SESSION['status'])): ?>
+        <div class="popup-message <?php echo ($_SESSION['status'] == 'success') ? '' : 'error-popup'; ?>" id="popup-alert">
+            <?php echo $_SESSION['message']; ?>
+        </div>
+
+        <script>
+            // Display the popup message
+            document.getElementById('popup-alert').style.display = 'block';
+
+            // Automatically hide the popup after 10 seconds
+            setTimeout(function() {
+                const popupAlert = document.getElementById('popup-alert');
+                if (popupAlert) {
+                    popupAlert.style.display = 'none';
+                }
+            }, 10000);
+
+            // If success message, redirect to index.php after 10 seconds
+            <?php if ($_SESSION['status'] == 'success'): ?>
+                setTimeout(function() {
+                    window.location.href = 'manage-students.php'; // Redirect after 10 seconds
+                }, 10000); // Delay 10 seconds before redirecting
+            <?php endif; ?>
+        </script>
+
+        <?php
+        // Clear session variables after showing the message
+        unset($_SESSION['status']);
+        unset($_SESSION['message']);
+        ?>
+    <?php endif; ?>
+
 
   <main id="main" class="main">
     <div class="pagetitle">
@@ -204,6 +258,11 @@ $disabledStudents = $conn->query("SELECT COUNT(*) as count FROM students WHERE s
                           <a href="process-students.php?delete_id=<?= $row['id'] ?>" class="btn btn-sm btn-danger action-btn">
                             <i class="bi bi-trash"></i>
                           </a>
+                          <form method="post" action="reset-password.php" onsubmit="return confirm('Are you sure you want to reset this password to 00000000?');">
+    <input type="hidden" name="reset_id" value="<?php echo $row['id']; ?>">
+    <button type="submit" class="btn btn-warning btn-sm"><i class="bi bi-recycle"></i></button>
+</form>
+
                         </div>
                       </td>
                     </tr>
