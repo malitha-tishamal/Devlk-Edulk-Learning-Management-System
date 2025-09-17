@@ -12,3 +12,4 @@ self.addEventListener("push", function(event) {
         self.registration.showNotification(data.title, options)
     );
 });
+ 
