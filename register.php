@@ -49,7 +49,14 @@ if (!preg_match("/^(\d{9}[VXvx]|\d{12})$/", $nic)) {
     respond('error', "Invalid NIC format.", $isAjax);
 }
 
+// Mobile validation (7XXXXXXXX) - optional
+/*
+if (!preg_match("/^7\d{8}$/", $mobile) || !preg_match("/^7\d{8}$/", $mobile2)) {
+    respond('error', "Invalid mobile number(s). Use format 7XXXXXXXX.", $isAjax);
+}
+*/
 
+// Check for existing regno or email
 $check = $conn->prepare("SELECT id FROM students WHERE regno = ? OR email = ?");
 $check->bind_param("ss", $regno, $email);
 $check->execute();
@@ -76,6 +83,7 @@ if ($stmt->execute()) {
     respond('error', "Failed to create account. Please try again.", $isAjax);
 }
 
+// Cleanup
 $stmt->close();
 $conn->close();
 ?>
