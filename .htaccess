@@ -1,0 +1,4 @@
+php_value display_errors Off
+php_value mbstring.http_input auto
+DirectoryIndex home.html
+php_value date.timezone Asia/Colombo

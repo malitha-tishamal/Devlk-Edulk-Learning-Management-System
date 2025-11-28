@@ -115,6 +115,9 @@ date_default_timezone_set('Asia/Colombo');
   <input type="checkbox" name="remember" id="remember">
   <label for="remember"> Remember Me</label>
 </div>
+                                        <div class="col-12 text-end">
+                                    <a href="forgot-password.php" class="small">Forgot Password?</a>
+                                </div>
 
 
                                         <!--div class="col-12">
