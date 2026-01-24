@@ -42,7 +42,7 @@ session_start();
                                         <?php unset($_SESSION['message']); unset($_SESSION['status']); ?>
                                     <?php endif; ?>
 
-                                    <form action="fogot.php" method="POST" class="row g-3 needs-validation" novalidate>
+                                    <form action="reset-password.php" method="POST" class="row g-3 needs-validation" novalidate>
                                         <div class="col-12">
                                             <label for="email" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="email" name="email" required>
